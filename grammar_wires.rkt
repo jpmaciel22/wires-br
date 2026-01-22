@@ -1,3 +1,4 @@
 #lang brag
-wires-program: wires-operation "->" WIRE
-wires-operation: CONSTANT | "NOT" WIRE | WIRE "AND" WIRE | WIRE "OR" WIRE | WIRE "LSHIFT" CONSTANT | WIRE "RSHIFT" CONSTANT
+wires-program: wires-operation "->" wire-term
+wires-operation: "NOT" wire-term | wire-term "AND" wire-term | wire-term "OR" wire-term | wire-term "LEFTSHIFT" wire-term | wire-term "RIGHTSHIFT" wire-term
+wire-term: WIRE | CONSTANT
