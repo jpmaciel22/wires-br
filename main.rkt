@@ -23,3 +23,24 @@
   [else #'(void)])
 (provide wire)
 
+(define-macro (define/display (ID) BODY)
+  #'(begin (define (ID) BODY)
+    (module+ main (displayln (format "~a: ~a" 'ID (ID))))))
+
+(define val
+  (let ([val-cache (make-hash)])
+    (lambda (num-or-wire)
+      (if (number? num-or-wire)
+          num-or-wire
+          (hash-ref! val-cache num-or-wire num-or-wire)))))
+
+(define (mod-16bit x) (modulo x 65536))
+(define-macro (define-16bit ID PROC-ID)
+  #'(define ID (compose1 mod-16bit PROC-ID))) ;; only to limit to 65535
+
+(define-16bit AND bitwise-and)
+(define-16bit OR bitwise-ior)
+(define-16bit NOT bitwise-not)
+(define-16bit LSHIFT arithmetic-shift)
+(define (RSHIFT x y) (LSHIFT x (- y)))
+(provide AND OR NOT LSHIFT RSHIFT)
